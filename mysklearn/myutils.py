@@ -213,6 +213,14 @@ def get_unique_labels(data):
                 labels.append(i)
     return labels
 
+def count_nv(data):
+    count = 0
+    for row in data:
+        for i in row:
+            if i == "N.V.":
+                count += 1
+    return count
+
 def discretizer(y_predicted):
     """Discretizes into two categories, high or low"""
     if y_predicted >= 100:

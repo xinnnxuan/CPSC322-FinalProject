@@ -235,8 +235,8 @@ class MyPyTable:
         """
         for row in range(len(self.data)):
             for i in range(len(self.data[row])):
-                if not self.data[row][i] or self.data[row][i] == "NA" and i == self.column_names.index(col_name):
-                    self.data[row][i] = self.calculate_average(col_name)
+                if not self.data[row][i] or self.data[row][i] == "NA" or self.data[row][i] == "N.V." and i == self.column_names.index(col_name):
+                    self.data[row][i] = int(self.calculate_average(col_name))
 
     def calculate_average(self, col_name):
         column = self.get_column(col_name)
