@@ -4,7 +4,6 @@ Class: CPSC 322 Fall 2024
 
 Description: Classes to represent several different classifiers"""
 
-from mysklearn import myutils
 import operator
 from mysklearn import myutils
 import numpy as np

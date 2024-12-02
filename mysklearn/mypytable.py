@@ -8,7 +8,6 @@ Description: This program contains a class MyPyTable that contains functions to 
 import copy
 import csv
 from tabulate import tabulate
-from mysklearn import myutils
 
 # required functions/methods are noted with TODOs
 # provided unit tests are in test_mypytable.py

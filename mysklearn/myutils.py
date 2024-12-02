@@ -5,7 +5,6 @@ Class: CPSC 322 Fall 2024
 Description: General utility functions"""
 
 import numpy as np
-from mysklearn.myclassifiers import MyKNeighborsClassifier
 from mysklearn.mypytable import MyPyTable
 
 X_train = [
@@ -212,6 +211,12 @@ def get_unique_labels(data):
             if i not in labels:
                 labels.append(i)
     return labels
+
+def display_num_unique_labels(col, name):
+    """Displays the number of unique labels for a given column"""
+    unique_vals = get_unique_labels(col)
+    num_unique = len(col)
+    print(f'There are {num_unique} unique {name}')
 
 def count_nv(data):
     count = 0
