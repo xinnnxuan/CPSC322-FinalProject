@@ -252,7 +252,23 @@ def price_discretizer(price):
     if price > 1707 and price <= 3411:
         return "very expensive"
 
-
+def year_discretizer(year):
+    """Discretizes year into 5 categories"""
+    if year <= 2000:
+        return "before 2000"
+    if year > 2000 and year <= 2010:
+        return "2000-2010"
+    if year > 2010 and year <= 2020:
+        return "2010-2020"
+    
+def num_ratings_discretizer(num_ratings):
+    """Discretizes number of ratings into 3 categories"""
+    if num_ratings <= 500:
+        return "few ratings"
+    if num_ratings > 500 and num_ratings <= 39273:
+        return "some ratings"
+    if num_ratings > 39273 and num_ratings <= 94257:
+        return "many ratings"
 
 def discretizer(y_predicted):
     """Discretizes into two categories, high or low"""
