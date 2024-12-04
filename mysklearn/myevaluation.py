@@ -9,10 +9,7 @@ from mysklearn import myutils
 import numpy as np # use numpy's random number generation
 import random
 from mysklearn import myutils
-from mysklearn.myclassifiers import MyKNeighborsClassifier
-from mysklearn.myclassifiers import MyDummyClassifier
 from mysklearn.myclassifiers import MyNaiveBayesClassifier
-from mysklearn.mypytable import MyPyTable
 
 def binary_precision_score(y_true, y_pred, labels=None, pos_label=None):
     """Compute the precision (for binary classification). The precision is the ratio tp / (tp + fp)
@@ -137,7 +134,7 @@ def random_subsample(X, y, k, classifier):
         # train classifier
         classifier.fit(X_train, y_train)
         if isinstance(classifier, MyNaiveBayesClassifier):
-            preds = classifier.predict(X_test, y_test)
+            preds = classifier.predict(X_test, y_train)
         else:
             preds = classifier.predict(X_test)
 
@@ -674,7 +671,7 @@ def accuracy_score(y_true, y_pred, normalize=True):
             https://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html#sklearn.metrics.accuracy_score
     """
     correctly_classified = 0
-    for i, val in enumerate(y_true):
+    for i, val in enumerate(y_pred):
         if y_true[i] == y_pred[i]:
             correctly_classified += 1
     if normalize == True:
