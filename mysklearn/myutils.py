@@ -226,15 +226,28 @@ def count_nv(data):
                 count += 1
     return count
 
-def price_discretizer(price):
-    """Discretizes price into 5 categories, """
-    if price <= 50:
-        return "cheap"
-    if price > 50 and price <= 200:
-        return "affordable"
-    if price > 200 and price <= 500:
+def rating_discretizer(rating):
+    """Discretizes rating into 5 categories"""
+    if rating <= 3.2:
+        return "poor"
+    if rating > 3.2 and rating <= 3.7:
+        return "ok"
+    if rating > 3.7 and rating <= 4.0:
         return "average"
-    if price > 500 and price <= 1707:
+    if rating > 4.0 and rating <= 4.2:
+        return "good"
+    if rating > 4.2 and rating <= 4.9:
+        return "excellent"
+
+def price_discretizer(price):
+    """Discretizes price into 5 categories"""
+    if price <= 10:
+        return "cheap"
+    if price > 10 and price <= 25:
+        return "affordable"
+    if price > 25 and price <= 50:
+        return "average"
+    if price > 50 and price <= 1707:
         return "expensive"
     if price > 1707 and price <= 3411:
         return "very expensive"
