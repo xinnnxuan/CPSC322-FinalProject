@@ -226,6 +226,21 @@ def count_nv(data):
                 count += 1
     return count
 
+def price_discretizer(price):
+    """Discretizes price into 5 categories, """
+    if price <= 684:
+        return "cheap"
+    if price > 684 and price <= 1365:
+        return "affordable"
+    if price > 1365 and price <= 2046:
+        return "average"
+    if price > 2046 and price <= 2727:
+        return "expensive"
+    if price > 2727 and price <= 3411:
+        return "very expensive"
+
+
+
 def discretizer(y_predicted):
     """Discretizes into two categories, high or low"""
     if y_predicted >= 100:
