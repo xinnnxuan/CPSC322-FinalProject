@@ -8,6 +8,24 @@ import operator
 from mysklearn import myutils
 import numpy as np
 
+class MyRandomForestClassifier:
+    """Represents a random forest classifier
+    
+    Attributes: 
+        X_train (list of list of obj): The list of training instances (samples).
+                The shape of X_train is (n_train_samples, n_features)
+        y_train(list of obj): The target y values (parallel to X_train).
+            The shape of y_train is n_samples
+        N (int): The number of decision trees to generate.
+        M (int): The number of most accurate ("best") decision trees to use for majority voting
+        F (int): The number of randomly selected attributes to consider at each node.
+        test_set (list of list of obj): The stratified test set (1/3 of the dataset).
+        remainder_set(list of list of obj): The remaineder set (2/3 of the dataset).
+        decision_trees (list of MyDecisionTreeClassifier): The decision trees in the forest
+        selected_trees (list of MyDecisionTreeClassifier): The M most accurate decsion trees.
+        test_predictions (list of obj): Predictions for the test set 
+    """
+
 class MyDecisionTreeClassifier:
     """Represents a decision tree classifier.
 
