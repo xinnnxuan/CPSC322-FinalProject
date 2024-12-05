@@ -10,6 +10,7 @@ import numpy as np # use numpy's random number generation
 import random
 from mysklearn import myutils
 from mysklearn.myclassifiers import MyNaiveBayesClassifier
+from collections import defaultdict
 
 def binary_precision_score(y_true, y_pred, labels=None, pos_label=None):
     """Compute the precision (for binary classification). The precision is the ratio tp / (tp + fp)
@@ -122,7 +123,7 @@ def create_matrix(X, y, k, classifier, totals=False):
 
     return matrix
 
-def random_subsample(X, y, k, classifier):
+def random_subsample(X, y, k, classifier, stratify=False):
     """Performs train_test_split on k folds"""
     mean_error_rate = 0
     accuracy_scores = []
@@ -130,7 +131,10 @@ def random_subsample(X, y, k, classifier):
 
     for i in range(k):
         # split data
-        X_train, X_test, y_train, y_test = train_test_split(X, y)
+        if stratify:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=True)            
+        else:
+            X_train, X_test, y_train, y_test = train_test_split(X, y)
         # train classifier
         classifier.fit(X_train, y_train)
         if isinstance(classifier, MyNaiveBayesClassifier):
@@ -266,7 +270,7 @@ def bootstrap_method(X, y, k, classifier):
     
     return mean_accuracy, mean_error_rate
 
-def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True):
+def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True, stratify=False):
     """Split dataset into train and test sets based on a test set size.
 
     Args:
@@ -301,19 +305,41 @@ def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True):
         y = y.copy()
         myutils.randomize_in_place(X, y)
     
-    # 2:1 split
-    if isinstance(test_size, float):
-        starting_test_index = int(test_size * len(X)) + 1
-        X_train = X[:len(X) - starting_test_index]
-        X_test = X[starting_test_index + 1:]
-        y_train = y[:len(X) - starting_test_index]
-        y_test = y[starting_test_index + 1:]
-    if isinstance(test_size, int):
-        starting_test_index = (len(X) - test_size)
-        X_train = X[:starting_test_index]
-        X_test = X[starting_test_index:]
-        y_train = y[:starting_test_index]
-        y_test = y[starting_test_index:]
+    if stratify:
+        # create dictionary to store indices for each class
+        stratified_indices = defaultdict(list)
+        for index, label in enumerate(y):
+            stratified_indices[label].append(index)
+        # split within each class
+        X_train, X_test, y_train, y_test = [], [], [], []
+        for label, indices in stratified_indices.items():
+            # calculate the number of samples in the test set for this class
+            num_test_samples = int(test_size * len(indices))
+
+            # split the indices
+            test_indices = indices[:num_test_samples]
+            train_indices = indices[num_test_samples:]
+
+            # append splits to respective lists
+            X_train.extend(X[train_indices[i]] for i in range(len(train_indices) - 1))
+            X_test.extend(X[test_indices[i]] for i in range(len(test_indices) - 1))
+            y_train.extend(y[train_indices[i]] for i in range(len(train_indices) - 1))
+            y_test.extend(y[test_indices[i]] for i in range(len(test_indices) - 1))
+
+    else:
+        # 2:1 split
+        if isinstance(test_size, float):
+            starting_test_index = int(test_size * len(X)) + 1
+            X_train = X[:len(X) - starting_test_index]
+            X_test = X[starting_test_index + 1:]
+            y_train = y[:len(X) - starting_test_index]
+            y_test = y[starting_test_index + 1:]
+        if isinstance(test_size, int):
+            starting_test_index = (len(X) - test_size)
+            X_train = X[:starting_test_index]
+            X_test = X[starting_test_index:]
+            y_train = y[:starting_test_index]
+            y_test = y[starting_test_index:]
 
     return X_train, X_test, y_train, y_test
 
