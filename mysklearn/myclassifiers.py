@@ -7,6 +7,7 @@ Description: Classes to represent several different classifiers"""
 import operator
 from mysklearn import myutils
 import numpy as np
+import random
 
 class MyRandomForestClassifier:
     """Represents a random forest classifier
@@ -183,9 +184,13 @@ class MyDecisionTreeClassifier:
         return partitions
     
     def tdidt(self, current_instances, available_attributes):
-        # basic approach (uses recursion!!):
+        # select a subset of attributes if F is specified
+        if self.F and self.F < len(available_attributes):
+            candidate_attributes = random.sample(available_attributes, self.F)
+        else:
+            candidate_attributes = available_attributes.copy()
         # select an attribute to split on
-        split_attribute = self.select_attribute(current_instances, available_attributes)
+        split_attribute = self.select_attribute(current_instances, candidate_attributes)
         available_attributes.remove(split_attribute) # can't split on this attribute again
         # in this subtree
         tree = ["Attribute", split_attribute]
