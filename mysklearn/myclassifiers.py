@@ -38,6 +38,8 @@ class MyRandomForestClassifier:
     
     def fit(self, X, y, N, M, F):
         selected_trees = []
+        trees = []
+        predictions = []
         # generate random stratified test set
         self.X_train, X_test, self.y_train, y_test = myutils.train_test_split(X, y, stratify=True) # X_train, X_test, y_train, y_test
         self.remainder_set = (self.X_train, self.y_train)
@@ -46,9 +48,21 @@ class MyRandomForestClassifier:
         self.M = M
         self.F = F
 
-        # use 2/3 of the set to generate N random decision trees using bootstrapping (X_train)
+        # use 2/3 of the set to generate N random decision trees using bootstrapping
+        for i in range(self.N):
+            X_train = self.remainder_set[0]
+            y_train = self.remainder_set[1]
 
-        # fit and predict on these decision trees
+            X_sample, X_out_of_bag, y_sample, y_out_of_bag = myutils.bootstrap_sample(X_train, y_train)
+            decision_tree_classifier = MyDecisionTreeClassifier()
+            decision_tree_classifier.fit(X_sample, y_sample)
+            trees.append(decision_tree_classifier)
+
+        # have each tree predict
+        for tree in trees:
+            pred = tree.predict(X_out_of_bag)
+            predictions.append(pred)
+
         # return a list of the M most accurate ones
         self.selected_trees = selected_trees
         return self.selected_trees

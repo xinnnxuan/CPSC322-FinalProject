@@ -140,6 +140,59 @@ def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True, stra
 
     return X_train, X_test, y_train, y_test
 
+def bootstrap_sample(X, y=None, n_samples=None, random_state=None):
+    """Split dataset into bootstrapped training set and out of bag test set.
+
+    Args:
+        X(list of list of obj): The list of samples
+        y(list of obj): The target y values (parallel to X)
+            Default is None (in this case, the calling code only wants to sample X)
+        n_samples(int): Number of samples to generate. If left to None (default) this is automatically
+            set to the first dimension of X.
+        random_state(int): integer used for seeding a random number generator for reproducible results
+
+    Returns:
+        X_sample(list of list of obj): The list of samples
+        X_out_of_bag(list of list of obj): The list of "out of bag" samples (e.g. left-over samples)
+        y_sample(list of obj): The list of target y values sampled (parallel to X_sample)
+            None if y is None
+        y_out_of_bag(list of obj): The list of target y values "out of bag" (parallel to X_out_of_bag)
+            None if y is None
+    Notes:
+        Loosely based on sklearn's resample():
+            https://scikit-learn.org/stable/modules/generated/sklearn.utils.resample.html
+        Sample indexes of X with replacement, then build X_sample and X_out_of_bag
+            as lists of instances using sampled indexes (use same indexes to build
+            y_sample and y_out_of_bag)
+    """
+
+    X_sample = []
+    X_out_of_bag = []
+    if y is not None:
+        y_sample = []
+        y_out_of_bag = []
+
+    if random_state is None:
+        random_state = 0
+    if n_samples is None:
+        n_samples = len(X)
+    np.random.seed(random_state)
+
+    # generate random indices
+    sampled_indices = np.random.randint(0, len(X), size=n_samples)
+    sampled_indices_set = set(sampled_indices)
+
+    # create bootstrap sample and out of bag samples
+    X_sample = [X[i] for i in sampled_indices]
+    X_out_of_bag = [X[i] for i in range(len(X)) if i not in sampled_indices_set]
+
+    if y is not None:
+        y_sample = [y[i] for i in sampled_indices]
+        y_out_of_bag = [y[i] for i in range(len(y)) if i not in sampled_indices_set]
+        return X_sample, X_out_of_bag, y_sample, y_out_of_bag
+    else:
+        return X_sample, X_out_of_bag
+    
 def extract_header_att_domains(X_train, y_train, header=None):
     if header is None:
         header = ['att' + str(i) for i in range(len(X_train[0]))]
