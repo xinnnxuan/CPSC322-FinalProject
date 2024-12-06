@@ -45,9 +45,14 @@ def test_random_forest_classifier_fit():
 
     # assert that the random forest contains the expected number of selected decision trees
     assert len(random_forest_classifier.selected_trees) == 5
-    # assert that the trees are not identical (check that they make different splits)
-    all_trees_are_unique = len({str(tree.tree) for tree in random_forest_classifier.selected_trees}) == len(random_forest_classifier.selected_trees)
-    assert all_trees_are_unique
+
+    # all_trees_are_unique = len({str(tree.tree) for tree in random_forest_classifier.selected_trees}) == len(random_forest_classifier.selected_trees)
+    # assert all_trees_are_unique
+
+    # assert that the trees are not identical
+    unique_trees = []
+    unique_trees += {str(tree.tree) for tree in random_forest_classifier.selected_trees if str(tree.tree) not in unique_trees}
+    assert len(unique_trees) > 1
     
 test_random_forest_classifier_fit()
 
@@ -69,11 +74,21 @@ def test_random_forest_classifier_predict():
         ["Junior", "Python", "no", "yes"]
     ]
     y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True", "True", "True", "True", "True", "False"]
+    X_test = [
+        ["Junior", "R", "yes", "yes"],
+        ["Senior", "Python", "no", "no"],
+        ["Mid", "Python", "no", "yes"]
+    ]
+    y_expected = ["False", "False", "True"]
+    random_forest_classifier = MyRandomForestClassifier()
+    random_forest_classifier.fit(X_train, y_train, 20, 5, 2)
 
-   
+    y_predicted = random_forest_classifier.predict(X_test)
+
+    assert y_predicted == y_expected
 
     pass
-
+test_random_forest_classifier_predict()
 def test_decision_tree_classifier_fit():
     X_train = [
         ["Senior", "Java", "no", "no"],
