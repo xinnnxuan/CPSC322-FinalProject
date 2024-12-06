@@ -193,6 +193,34 @@ def bootstrap_sample(X, y=None, n_samples=None, random_state=None):
     else:
         return X_sample, X_out_of_bag
     
+def accuracy_score(y_true, y_pred, normalize=True):
+    """Compute the classification prediction accuracy score.
+
+    Args:
+        y_true(list of obj): The ground_truth target y values
+            The shape of y is n_samples
+        y_pred(list of obj): The predicted target y values (parallel to y_true)
+            The shape of y is n_samples
+        normalize(bool): If False, return the number of correctly classified samples.
+            Otherwise, return the fraction of correctly classified samples.
+
+    Returns:
+        score(float): If normalize == True, return the fraction of correctly classified samples (float),
+            else returns the number of correctly classified samples (int).
+
+    Notes:
+        Loosely based on sklearn's accuracy_score():
+            https://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html#sklearn.metrics.accuracy_score
+    """
+    correctly_classified = 0
+    for i, val in enumerate(y_pred):
+        if y_true[i] == y_pred[i]:
+            correctly_classified += 1
+    if normalize == True:
+        correctly_classified = correctly_classified / (len(y_true))
+
+    return correctly_classified
+
 def extract_header_att_domains(X_train, y_train, header=None):
     if header is None:
         header = ['att' + str(i) for i in range(len(X_train[0]))]

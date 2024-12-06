@@ -39,7 +39,7 @@ class MyRandomForestClassifier:
     def fit(self, X, y, N, M, F):
         selected_trees = []
         trees = []
-        predictions = []
+        accuracy_scores = []
         # generate random stratified test set
         self.X_train, X_test, self.y_train, y_test = myutils.train_test_split(X, y, stratify=True) # X_train, X_test, y_train, y_test
         self.remainder_set = (self.X_train, self.y_train)
@@ -55,13 +55,18 @@ class MyRandomForestClassifier:
 
             X_sample, X_out_of_bag, y_sample, y_out_of_bag = myutils.bootstrap_sample(X_train, y_train)
             decision_tree_classifier = MyDecisionTreeClassifier()
-            decision_tree_classifier.fit(X_sample, y_sample)
+            decision_tree_classifier.fit(X_sample, y_sample, F=F)
             trees.append(decision_tree_classifier)
 
         # have each tree predict
         for tree in trees:
-            pred = tree.predict(X_out_of_bag)
-            predictions.append(pred)
+            y_pred = tree.predict(X_out_of_bag)
+            # calculate the accuracy score
+            accuracy_score = myutils.accuracy_score(y_test, y_pred)
+            accuracy_scores.append(accuracy_score)
+        
+        # get the highest accuracy_scores
+        accuracy_scores.sort()
 
         # return a list of the M most accurate ones
         self.selected_trees = selected_trees
@@ -94,8 +99,9 @@ class MyDecisionTreeClassifier:
         self.header = None
         self.attribute_domains = None
         self.tree = None
+        self.F = None
 
-    def fit(self, X_train, y_train):
+    def fit(self, X_train, y_train, F=None):
         """Fits a decision tree classifier to X_train and y_train using the TDIDT
         (top down induction of decision tree) algorithm.
 
@@ -116,6 +122,7 @@ class MyDecisionTreeClassifier:
 
         # extract header and attribute_domains
         self.header, self.attribute_domains = myutils.extract_header_att_domains(X_train, y_train)
+        self.F = F
         if not isinstance(X_train[0], list):
             X_train = myutils.convert_to_2D(X_train)
         # lets stitch together X_train and y_train
