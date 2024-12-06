@@ -48,22 +48,22 @@ class MyRandomForestClassifier:
         self.N = N
         self.M = M
         self.F = F
-
+        random_state = 0
         # use 2/3 of the set to generate N random decision trees using bootstrapping
         for i in range(self.N):
             X_train = self.remainder_set[0]
             y_train = self.remainder_set[1]
-
-            X_sample, X_out_of_bag, y_sample, y_out_of_bag = myutils.bootstrap_sample(X_train, y_train)
+            
+            X_sample, X_out_of_bag, y_sample, y_out_of_bag = myutils.bootstrap_sample(X_train, y_train, random_state=random_state)
+            random_state += 1
             decision_tree_classifier = MyDecisionTreeClassifier()
             decision_tree_classifier.fit(X_sample, y_sample, F=F)
             trees.append(decision_tree_classifier)
 
-        # have each tree predict
-        for tree in trees:
-            y_pred = tree.predict(X_out_of_bag)
+            # have each tree predict
+            y_pred = decision_tree_classifier.predict(X_out_of_bag)
             # calculate the accuracy score
-            accuracy_score = myutils.accuracy_score(y_test, y_pred)
+            accuracy_score = myutils.accuracy_score(y_out_of_bag, y_pred)
             accuracy_scores.append(accuracy_score)
         
         # get the highest accuracy_scores

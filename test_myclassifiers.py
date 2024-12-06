@@ -39,10 +39,17 @@ def test_random_forest_classifier_fit():
         ["Junior", "Python", "no", "yes"]
     ]
     y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True", "True", "True", "True", "True", "False"]
-     # assert that the random forest contains the expected number of decision trees
-    # assert that the trees are not identical (check that they make different splits)
 
-    pass
+    random_forest_classifier = MyRandomForestClassifier()
+    random_forest_classifier.fit(X_train, y_train, 20, 5, 2)
+
+    # assert that the random forest contains the expected number of selected decision trees
+    assert len(random_forest_classifier.selected_trees) == 5
+    # assert that the trees are not identical (check that they make different splits)
+    all_trees_are_unique = len({str(tree.tree) for tree in random_forest_classifier.selected_trees}) == len(random_forest_classifier.selected_trees)
+    assert all_trees_are_unique
+    
+test_random_forest_classifier_fit()
 
 def test_random_forest_classifier_predict():
     X_train = [
