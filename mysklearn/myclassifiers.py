@@ -67,8 +67,10 @@ class MyRandomForestClassifier:
             accuracy_scores.append(accuracy_score)
         
         # get the highest accuracy_scores
-        accuracy_scores.sort()
-
+        scored_trees = list(zip(accuracy_scores, trees))
+        scored_trees.sort(key=lambda x: x[0], reverse=True) 
+        selected_trees = scored_trees[:self.M]
+        selected_trees = [selected_trees[i][1] for i in range(len(selected_trees))] 
         # return a list of the M most accurate ones
         self.selected_trees = selected_trees
         return self.selected_trees
