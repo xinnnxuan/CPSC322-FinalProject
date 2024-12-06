@@ -7,7 +7,6 @@ Description: This program contains methods for various sampling methods and eval
 
 from mysklearn import myutils
 import numpy as np # use numpy's random number generation
-import random
 from mysklearn import myutils
 from mysklearn.myclassifiers import MyNaiveBayesClassifier
 from collections import defaultdict

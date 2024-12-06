@@ -39,6 +39,8 @@ def test_random_forest_classifier_fit():
         ["Junior", "Python", "no", "yes"]
     ]
     y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True", "True", "True", "True", "True", "False"]
+     # assert that the random forest contains the expected number of decision trees
+    # assert that the trees are not identical (check that they make different splits)
 
     pass
 
@@ -60,6 +62,8 @@ def test_random_forest_classifier_predict():
         ["Junior", "Python", "no", "yes"]
     ]
     y_train = ["False", "False", "True", "True", "True", "False", "True", "False", "True", "True", "True", "True", "True", "False"]
+
+   
 
     pass
 

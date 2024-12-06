@@ -25,6 +25,37 @@ class MyRandomForestClassifier:
         selected_trees (list of MyDecisionTreeClassifier): The M most accurate decsion trees.
         test_predictions (list of obj): Predictions for the test set 
     """
+    def __init__(self):
+        """Initializer for MyRandomForestClassifier"""
+        self.X_train = None
+        self.y_train = None
+        self.test_set = None
+        self.remainder_set = None
+        self.N = None # number of trees
+        self.M = None # number of "best" trees
+        self.F = None # number of random atts to consider at each split
+        self.selected_trees = [] # stores the M best trees
+    
+    def fit(self, X, y, N, M, F):
+        selected_trees = []
+        # generate random stratified test set
+        self.X_train, X_test, self.y_train, y_test = myutils.train_test_split(X, y, stratify=True) # X_train, X_test, y_train, y_test
+        self.remainder_set = (self.X_train, self.y_train)
+        self.test_set = (X_test, y_test)
+        self.N = N
+        self.M = M
+        self.F = F
+
+        # use 2/3 of the set to generate N random decision trees using bootstrapping (X_train)
+
+        # fit and predict on these decision trees
+        # return a list of the M most accurate ones
+        self.selected_trees = selected_trees
+        return self.selected_trees
+
+    def predict(self, X_test):
+        pass
+
 
 class MyDecisionTreeClassifier:
     """Represents a decision tree classifier.
@@ -49,7 +80,6 @@ class MyDecisionTreeClassifier:
         self.header = None
         self.attribute_domains = None
         self.tree = None
-        
 
     def fit(self, X_train, y_train):
         """Fits a decision tree classifier to X_train and y_train using the TDIDT
@@ -72,9 +102,9 @@ class MyDecisionTreeClassifier:
 
         # extract header and attribute_domains
         self.header, self.attribute_domains = myutils.extract_header_att_domains(X_train, y_train)
-        # lets stitch together X_train and y_train
         if not isinstance(X_train[0], list):
             X_train = myutils.convert_to_2D(X_train)
+        # lets stitch together X_train and y_train
         train = [X_train[i] + [y_train[i]] for i in range(len(X_train))] # each instance w its class label on the end
         # make a copy of header, bc python pass by object reference
         # and tdidt will be removing attributes from available_attributes

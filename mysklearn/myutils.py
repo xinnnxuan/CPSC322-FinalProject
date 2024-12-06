@@ -6,6 +6,7 @@ Description: General utility functions"""
 
 import numpy as np
 from mysklearn.mypytable import MyPyTable
+from collections import defaultdict
 
 X_train = [
         ["Senior", "Java", "no", "no"],
@@ -65,6 +66,79 @@ interview_tree_solution =   ["Attribute", "att0",
                                     ]
                                 ]
                             ]
+
+def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True, stratify=False):
+    """Split dataset into train and test sets based on a test set size.
+
+    Args:
+        X(list of list of obj): The list of samples
+            The shape of X is (n_samples, n_features)
+        y(list of obj): The target y values (parallel to X)
+            The shape of y is n_samples
+        test_size(float or int): float for proportion of dataset to be in test set (e.g. 0.33 for a 2:1 split)
+            or int for absolute number of instances to be in test set (e.g. 5 for 5 instances in test set)
+        random_state(int): integer used for seeding a random number generator for reproducible results
+            Use random_state to seed your random number generator
+                you can use the math module or use numpy for your generator
+                choose one and consistently use that generator throughout your code
+        shuffle(bool): whether or not to randomize the order of the instances before splitting
+            Shuffle the rows in X and y before splitting and be sure to maintain the parallel order of X and y!!
+
+    Returns:
+        X_train(list of list of obj): The list of training samples
+        X_test(list of list of obj): The list of testing samples
+        y_train(list of obj): The list of target y values for training (parallel to X_train)
+        y_test(list of obj): The list of target y values for testing (parallel to X_test)
+
+    Note:
+        Loosely based on sklearn's train_test_split():
+            https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+    """
+    if random_state == None:
+        random_state = 0
+    
+    if shuffle:
+        X = X.copy()
+        y = y.copy()
+        randomize_in_place(X, y)
+    
+    if stratify:
+        # create dictionary to store indices for each class
+        stratified_indices = defaultdict(list)
+        for index, label in enumerate(y):
+            stratified_indices[label].append(index)
+        # split within each class
+        X_train, X_test, y_train, y_test = [], [], [], []
+        for label, indices in stratified_indices.items():
+            # calculate the number of samples in the test set for this class
+            num_test_samples = int(test_size * len(indices))
+
+            # split the indices
+            test_indices = indices[:num_test_samples]
+            train_indices = indices[num_test_samples:]
+
+            # append splits to respective lists
+            X_train.extend(X[train_indices[i]] for i in range(len(train_indices) - 1))
+            X_test.extend(X[test_indices[i]] for i in range(len(test_indices) - 1))
+            y_train.extend(y[train_indices[i]] for i in range(len(train_indices) - 1))
+            y_test.extend(y[test_indices[i]] for i in range(len(test_indices) - 1))
+
+    else:
+        # 2:1 split
+        if isinstance(test_size, float):
+            starting_test_index = int(test_size * len(X)) + 1
+            X_train = X[:len(X) - starting_test_index]
+            X_test = X[starting_test_index + 1:]
+            y_train = y[:len(X) - starting_test_index]
+            y_test = y[starting_test_index + 1:]
+        if isinstance(test_size, int):
+            starting_test_index = (len(X) - test_size)
+            X_train = X[:starting_test_index]
+            X_test = X[starting_test_index:]
+            y_train = y[:starting_test_index]
+            y_test = y[starting_test_index:]
+
+    return X_train, X_test, y_train, y_test
 
 def extract_header_att_domains(X_train, y_train, header=None):
     if header is None:
