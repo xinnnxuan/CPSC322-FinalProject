@@ -76,8 +76,15 @@ class MyRandomForestClassifier:
         return self.selected_trees
 
     def predict(self, X_test):
-        pass
+        """Uses majority voting to predict classes using the M decision trees"""
+        predictions = []
 
+        for instance in X_test:
+            predictions = [tree.predict(instance) for tree in self.selected_trees]
+            most_common_label = myutils.most_frequent(predictions)
+            predictions.append(most_common_label)
+
+        return predictions
 
 class MyDecisionTreeClassifier:
     """Represents a decision tree classifier.

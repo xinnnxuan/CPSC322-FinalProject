@@ -8,7 +8,7 @@ Description: This program contains methods for various sampling methods and eval
 from mysklearn import myutils
 import numpy as np # use numpy's random number generation
 from mysklearn import myutils
-from mysklearn.myclassifiers import MyNaiveBayesClassifier
+from mysklearn.myclassifiers import MyNaiveBayesClassifier, MyRandomForestClassifier
 from collections import defaultdict
 
 def binary_precision_score(y_true, y_pred, labels=None, pos_label=None):
@@ -122,7 +122,7 @@ def create_matrix(X, y, k, classifier, totals=False):
 
     return matrix
 
-def random_subsample(X, y, k, classifier, stratify=False):
+def random_subsample(X, y, k, classifier, stratify=False, N=None, M=None, F=None):
     """Performs train_test_split on k folds"""
     mean_error_rate = 0
     accuracy_scores = []
@@ -135,7 +135,10 @@ def random_subsample(X, y, k, classifier, stratify=False):
         else:
             X_train, X_test, y_train, y_test = train_test_split(X, y)
         # train classifier
-        classifier.fit(X_train, y_train)
+        if isinstance(classifier, MyRandomForestClassifier):
+            classifier.fit(X_train, y_train, N, M, F)
+        else:
+            classifier.fit(X_train, y_train)
         if isinstance(classifier, MyNaiveBayesClassifier):
             preds = classifier.predict(X_test, y_train)
         else:
