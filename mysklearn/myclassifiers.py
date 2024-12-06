@@ -131,6 +131,8 @@ class MyDecisionTreeClassifier:
         """
 
         # extract header and attribute_domains
+        self.X_train = X_train
+        self.y_train = y_train
         self.header, self.attribute_domains = myutils.extract_header_att_domains(X_train, y_train)
         self.F = F
         if not isinstance(X_train[0], list):
@@ -175,8 +177,8 @@ class MyDecisionTreeClassifier:
             if branch[0] == "Value" and branch[1] == instance_value:
                 return self.predict_instance(instance, branch[2])  # recurse into the subtree
 
-        # if no matching branch is found, handle it
-        return None
+        # if no matching branch is found, defualt prediction of the majority class in the training data
+        return max(set(self.y_train), key=self.y_train.count)
     
     def partition_instances(self, instances, attribute):
         # this is group by attribute domain (not values of attribute in instances)
