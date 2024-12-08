@@ -88,6 +88,7 @@ def test_random_forest_classifier_predict():
     assert y_predicted == y_expected
 
     pass
+
 test_random_forest_classifier_predict()
 def test_decision_tree_classifier_fit():
     X_train = [
