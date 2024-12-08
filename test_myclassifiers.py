@@ -15,7 +15,8 @@ from mysklearn.mypytable import MyPyTable
 
 from mysklearn.myclassifiers import MySimpleLinearRegressionClassifier,\
     MyKNeighborsClassifier,\
-    MyDummyClassifier
+    MyDummyClassifier,\
+    MySimpleLinearRegressor
 
 from mysklearn.myclassifiers import MyNaiveBayesClassifier
 from mysklearn.myclassifiers import MyDecisionTreeClassifier

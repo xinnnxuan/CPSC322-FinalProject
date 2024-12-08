@@ -10,11 +10,13 @@ def load_classifier():
     # unpickle header and tree in tree.p
     infile = open('tree.p', 'rb')
     header, tree = pickle.load(infile)
-    infile.close()
-
     decision_tree_classifier = MyDecisionTreeClassifier()
     decision_tree_classifier.header = header
     decision_tree_classifier.tree = tree
+    print('loaded header:', decision_tree_classifier.header)
+    print('loaded tree:', decision_tree_classifier.tree)
+    infile.close()
+
     return decision_tree_classifier
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -24,8 +26,11 @@ def index():
         price = request.form['Price']
         year = request.form['Year']
         num_ratings = request.form['NumberOfRatings']
+        print(request.form)
         decision_tree_classifier = load_classifier()
+        print('tree:', decision_tree_classifier.tree)
         prediction = predict_rating([price, year, num_ratings], decision_tree_classifier)
+        print('prediction:', prediction)
     return render_template('index.html', prediction=prediction)
 
 @app.route('/predict', methods=['GET'])
