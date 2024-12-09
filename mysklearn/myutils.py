@@ -383,46 +383,46 @@ def count_nv(data):
 
 def rating_discretizer(rating):
     """Discretizes rating into 5 categories"""
-    if rating <= 3.3:
+    if rating <= 3.5:
         return "poor"
-    if rating > 3.3 and rating <= 3.7:
+    if rating > 3.5 and rating <= 3.7:
         return "ok"
-    if rating > 3.7 and rating <= 4.0:
+    if rating > 3.7 and rating <= 3.9:
         return "average"
-    if rating > 4.0 and rating <= 4.2:
+    if rating > 3.9 and rating <= 4.1:
         return "good"
-    if rating > 4.2 and rating <= 4.9:
+    if rating > 4.1 and rating <= 4.9:
         return "excellent"
 
 def price_discretizer(price):
     """Discretizes price into 5 categories"""
-    if price <= 10:
+    if price <= 9:
         return "cheap"
-    if price > 10 and price <= 25:
+    if price > 9 and price <= 15:
         return "affordable"
-    if price > 25 and price <= 50:
+    if price > 15 and price <= 30:
         return "average"
-    if price > 50 and price <= 1707:
+    if price > 30 and price <= 100:
         return "expensive"
-    if price > 1707:
+    if price > 100:
         return "very expensive"
 
 def year_discretizer(year):
     """Discretizes year into 5 categories"""
-    if year <= 2000:
-        return "before 2000"
-    if year > 2000 and year <= 2010:
-        return "2000-2010"
-    if year > 2010:
-        return "2010-present"
+    if year <= 2014:
+        return "before 2014"
+    if year > 2014 and year <= 2017:
+        return "2014-2017"
+    if year > 2017:
+        return "2017-present"
     
 def num_ratings_discretizer(num_ratings):
     """Discretizes number of ratings into 3 categories"""
-    if num_ratings <= 500:
+    if num_ratings <= 95:
         return "few ratings"
-    if num_ratings > 500 and num_ratings <= 39273:
+    if num_ratings > 95 and num_ratings <= 500:
         return "some ratings"
-    if num_ratings > 39273:
+    if num_ratings > 500:
         return "many ratings"
 
 def discretizer(y_predicted):
