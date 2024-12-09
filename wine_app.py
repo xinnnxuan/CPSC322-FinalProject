@@ -3,6 +3,7 @@ import pickle
 from flask import Flask, request, jsonify, redirect
 from flask import render_template
 from mysklearn.myclassifiers import MyDecisionTreeClassifier
+from mysklearn import myutils
 
 app = Flask(__name__)
 
@@ -21,34 +22,48 @@ def load_classifier():
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    prediction = ""
-    if request.method == 'POST':
-        price = request.form['Price']
-        year = request.form['Year']
-        num_ratings = request.form['NumberOfRatings']
-        print(request.form)
-        decision_tree_classifier = load_classifier()
-        print('tree:', decision_tree_classifier.tree)
-        prediction = predict_rating([price, year, num_ratings], decision_tree_classifier)
-        print('prediction:', prediction)
-    return render_template('index.html', prediction=prediction)
+    # prediction = ""
+    # if request.method == 'POST':
+    #     price = request.form['Price']
+    #     year = request.form['Year']
+    #     num_ratings = request.form['NumberOfRatings']
+    #     print('price from index', price)
+    #     print('year from index', year)
+    #     print('num ratings from index', num_ratings)
+    #     print(request.form)
+    #     decision_tree_classifier = load_classifier()
+    #     print('tree:', decision_tree_classifier.tree)
+    #     prediction = predict_rating([price, year, num_ratings], decision_tree_classifier)
+    #     print('prediction:', prediction)
+        # render the form on the index page
+    return render_template('index.html', prediction="")
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    # parse the unseen instance values from the query string
-    # they are in the request object
-    price = request.args.get('Price') # defaults to None
-    year = request.args.get('Year')
-    num_ratings = request.args.get('NumberOfRatings')
-    instance = [price, year, num_ratings]
+    # parse the unseen instance values from the query string (from the POST request, they are in the request object
+    price = request.form.get('Price') # defaults to None
+    year = request.form.get('Year')
+    num_ratings = request.form.get('NumberOfRatings')
+    print('price from predict', price)
+    print('year from predict', year)
+    print('num ratings from predict', num_ratings)
+
+    # load the classifier and make a prediction
     decision_tree_classifier = load_classifier()
+    instance = [price, year, num_ratings]
     prediction = predict_rating(instance, decision_tree_classifier)
+
     if prediction is not None: 
-        return jsonify({'prediction': prediction}), 200
+        return render_template('index.html', prediction=prediction)
     return 'Error making a prediction', 400
 
 def predict_rating(unseen_instance, classifier):
     try:
+        # discretize unseen instance values before prediction
+        unseen_instance[0] = myutils.price_discretizer(unseen_instance[0])
+        unseen_instance[1] = myutils.year_discretizer(unseen_instance[1])
+        unseen_instance[2] = myutils.num_ratings_discretizer(unseen_instance[2])
+        print('classifier tree from predict rating', classifier.tree)
         return classifier.predict(unseen_instance)
     except:
         return None
