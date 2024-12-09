@@ -387,9 +387,9 @@ def rating_discretizer(rating):
         return "poor"
     if rating > 3.5 and rating <= 3.7:
         return "ok"
-    if rating > 3.7 and rating <= 3.9:
+    if rating > 3.7 and rating <= 3.8:
         return "average"
-    if rating > 3.9 and rating <= 4.1:
+    if rating > 3.8 and rating <= 4.1:
         return "good"
     if rating > 4.1 and rating <= 4.9:
         return "excellent"
