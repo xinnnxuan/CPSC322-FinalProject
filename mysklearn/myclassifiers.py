@@ -169,10 +169,10 @@ class MyDecisionTreeClassifier:
             return tree[1]
         # otherwise, it's an attribute node
         attribute = tree[1]
-        attribute_index = self.header.index(attribute)  # index of the attribute in the instance
         if not isinstance(instance, list):
             instance_value = instance
         else:
+            attribute_index = self.header.index(attribute)  # index of the attribute in the instance
             instance_value = instance[attribute_index]  # value of the attribute in the test instance
 
         # traverse the branches
