@@ -383,9 +383,9 @@ def count_nv(data):
 
 def rating_discretizer(rating):
     """Discretizes rating into 5 categories"""
-    if rating <= 3.2:
+    if rating <= 3.3:
         return "poor"
-    if rating > 3.2 and rating <= 3.7:
+    if rating > 3.3 and rating <= 3.7:
         return "ok"
     if rating > 3.7 and rating <= 4.0:
         return "average"
