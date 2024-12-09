@@ -396,25 +396,25 @@ def rating_discretizer(rating):
 
 def price_discretizer(price):
     """Discretizes price into 5 categories"""
-    if price <= 9:
+    if price <= 10:
         return "cheap"
-    if price > 9 and price <= 15:
+    if price > 10 and price <= 25:
         return "affordable"
-    if price > 15 and price <= 30:
+    if price > 25 and price <= 50:
         return "average"
-    if price > 30 and price <= 100:
+    if price > 50 and price <= 150:
         return "expensive"
-    if price > 100:
+    if price > 150:
         return "very expensive"
 
 def year_discretizer(year):
     """Discretizes year into 5 categories"""
     if year <= 2014:
         return "before 2014"
-    if year > 2014 and year <= 2017:
-        return "2014-2017"
-    if year > 2017:
-        return "2017-present"
+    if year > 2014 and year <= 2016:
+        return "2014-2016"
+    if year > 2016:
+        return "2016-present"
     
 def num_ratings_discretizer(num_ratings):
     """Discretizes number of ratings into 3 categories"""
