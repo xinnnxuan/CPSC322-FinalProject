@@ -1,9 +1,10 @@
-"""Programmer: Lindsey Bodenbender
+"""
 Class: CPSC 322 Fall 2024
 Programming Assignment Final project
 12/4/2024
 
-Description: Tests for classifiers"""
+Description: Tests for classifiers
+"""
 
 import numpy as np
 # pylint: skip-file
