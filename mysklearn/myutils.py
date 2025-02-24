@@ -1,8 +1,9 @@
-"""Programmer: Lindsey Bodenbender
+"""
 Class: CPSC 322 Fall 2024
 11/18/2024
 
-Description: General utility functions"""
+Description: General utility functions
+"""
 
 import numpy as np
 from mysklearn.mypytable import MyPyTable
